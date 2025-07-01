@@ -5,9 +5,9 @@ const dns = require("dns");
 const app = express();
 app.use(express.json());
 
-// ✅ Разрешаем запросы с фронтенда
+// ✅ Разрешить CORS (для Netlify и других фронтов)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "*"); // ← это ключевая строка
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
