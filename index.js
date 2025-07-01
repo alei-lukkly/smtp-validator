@@ -1,6 +1,6 @@
 const express = require("express");
 const validator = require("email-validator");
-const SMTPConnection = require("smtp-connection");
+const nodemailer = require("nodemailer");
 
 const app = express();
 app.use(express.json());
@@ -12,18 +12,19 @@ app.post("/validate", async (req, res) => {
   }
 
   const domain = email.split("@")[1];
-  const connection = new SMTPConnection({ port: 25, host: domain, tls: { rejectUnauthorized: false }, socketTimeout: 3000 });
-
-  connection.on("error", () => {});
-  connection.connect(() => {
-    connection.quit();
-    res.json({ valid: true });
+  const transporter = nodemailer.createTransport({
+    host: domain,
+    port: 25,
+    secure: false,
+    tls: { rejectUnauthorized: false }
   });
 
-  setTimeout(() => {
-    connection.close();
-    res.status(408).json({ valid: false, reason: "Timeout" });
-  }, 5000);
+  try {
+    await transporter.verify();
+    res.json({ valid: true });
+  } catch (e) {
+    res.status(400).json({ valid: false, reason: e.message });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
