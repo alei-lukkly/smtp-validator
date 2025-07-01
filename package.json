@@ -1,0 +1,14 @@
+{
+  "name": "smtp-validator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "email-validator": "^2.0.4",
+    "smtp-connection": "^6.4.0"
+  }
+}
